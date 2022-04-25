@@ -1,4 +1,3 @@
-import { User } from './../../models/user.model';
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -12,8 +11,6 @@ export class RegisterComponent {
 
 
   registerForm: FormGroup;
-  showFirstPassword: boolean = false;
-  showSecondPassword: boolean = false;
   errMessageCred: string = "";
 
   constructor(private fb: FormBuilder, private authenticationService: AuthenticationService) {
@@ -35,12 +32,12 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid && this.getFirstPassword() === this.getRepeatPassword()) {
-      this.authenticationService.register(this.getUser()).subscribe(response => {
+      this.authenticationService.register(this.getEmail(), this.getFirstPassword()).subscribe(response => {
         this.authenticationService.storeUserToken(response.token);
         this.authenticationService.gotoUsersDashboard();
       },
-      (response) => {
-        this.errMessageCred = response.error.error;
+      (errorResponse) => {
+        this.errMessageCred = errorResponse.error.error;
       })
     } else {
       this.errMessageCred = 'Your password does not match';
@@ -57,18 +54,6 @@ export class RegisterComponent {
 
   getRepeatPassword() {
     return this.registerForm.value.repeatPassword;
-  }
-
-  getFormsValue() {
-    return this.registerForm.value;
-  }
-
-  getUser(): User {
-    let user: User = {
-      email: this.getEmail(),
-      password: this.getFirstPassword()
-    }
-    return user;
   }
 
 }

@@ -1,7 +1,6 @@
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +10,6 @@ import { User } from '../../models/user.model';
 export class LoginComponent {
 
   loginForm: FormGroup;
-  showEyeIcon: boolean = false;
   errMessageCred: string = "";
 
   constructor(private fb: FormBuilder, private authenticationService: AuthenticationService) {
@@ -28,9 +26,12 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.authenticationService.login(this.getUser()).subscribe(token => {
+      this.authenticationService.login(this.getEmail(), this.getPassword()).subscribe(token => {
         this.authenticationService.storeUserToken(token.token);
         this.authenticationService.gotoUsersDashboard();
+      },
+      (errorResponse) => {
+        this.errMessageCred = errorResponse.error.error;
       })
     }
   }
@@ -41,14 +42,6 @@ export class LoginComponent {
 
   getPassword() {
     return this.loginForm.value.password;
-  }
-
-  getUser(): User {
-    let user: User = {
-      email: this.getEmail(),
-      password: this.getPassword()
-    };
-    return user;
   }
 
 }

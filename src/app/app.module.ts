@@ -1,3 +1,4 @@
+import { UsersManagementModule } from './users-management/users-management.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,7 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AuthenticationModule
+    AuthenticationModule,
+    UsersManagementModule
   ],
   providers: [],
   bootstrap: [AppComponent]
