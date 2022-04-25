@@ -1,1 +1,17 @@
-<p>user-dashboard works!</p>
+<div class="header-users-management">
+    <h1>
+        Users Management
+    </h1>
+    <button type="button" class="btn btn-primary btn-lg" (click)="addNewUser()">Add user</button>
+</div>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div *ngFor="let user of users" class="col">
+        <div class="card h-100">
+            <img src="{{user.avatar}}" class="card-img-top">
+            <div class="card-body">
+                <h2 class="card-title">{{user.email}}</h2>
+            </div>
+            <a [routerLink]="['/users', user.id]" class="stretched-link"></a>
+        </div>
+    </div>
+</div>
