@@ -1,0 +1,48 @@
+<h1>
+    Sign in
+</h1>
+<div class="container">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" formControlName="email" placeholder="Enter Email">
+            <small class="form-text text-muted"
+                *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['required']">
+                <div class="alert alert-danger" role="alert">
+                    Please enter an email !
+                </div>
+            </small>
+
+            <small class="form-text text-muted"
+                *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['email']">
+                <div class="alert alert-danger" role="alert">
+                    Email address is invalid.
+                </div>
+            </small>
+        </div>
+
+        <div class="form-group password-form">
+            <label for="exampleInputPassword1">Password</label>
+            <div class="d-flex">
+                <input type="password" class="form-control" formControlName="password" placeholder="Enter Password"
+                    data-ng-pattern="/^\S*$/">
+            </div>
+        </div>
+        <div class="d-grid gap-2 div-button">
+            <button type="submit" class="btn btn-primary btn-block sign-in" [disabled]="!loginForm.valid">Sign in</button>
+        </div>
+        <div *ngIf="errMessageCred.length > 0" class="alert alert-danger" role="alert">
+            {{errMessageCred}}
+        </div>
+    </form>
+    <div class="container register-div">
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-6">
+                <p class="not-member">Not a member?</p>
+            </div>
+            <div class="col col-lg-2">
+                <a class="register" routerLink="/register" routerLinkActive="active">Register</a>
+            </div>
+        </div>
+    </div>
+</div>

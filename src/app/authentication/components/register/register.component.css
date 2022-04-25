@@ -1,0 +1,29 @@
+h1 {
+    text-align: center;
+    padding-top: 3%;
+}
+
+.password-form {
+    margin-top: 3%;
+}
+
+.container {
+    width: 50%;
+}
+
+.div-button {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.button-eyeslash {
+    background-color: rgb(214, 214, 214);
+}
+
+.login-div {
+    padding-bottom: 5%;
+}
+
+.register, .already-member, .login {
+    font-size: 1.3em;
+}
