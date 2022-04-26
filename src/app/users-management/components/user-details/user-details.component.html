@@ -1,4 +1,7 @@
-<!-- <div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="alert alert-danger error-message" role="alert" *ngIf="errorMessage$ | async as errorMessage">
+    {{errorMessage}}
+  </div>
+<div class="row row-cols-1 row-cols-md-3 g-4" *ngIf="user$ |async as user">
     <div class="col">
         <div class="card h-100">
             <img src="{{user.avatar}}" class="card-img-top">
@@ -8,4 +11,4 @@
             <a [routerLink]="['/users', user.id]" class="stretched-link"></a>
         </div>
     </div>
-</div> -->
+</div>

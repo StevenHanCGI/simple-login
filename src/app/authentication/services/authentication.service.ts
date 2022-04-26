@@ -1,9 +1,10 @@
+import { LoginDto } from './../../shared/DTO/login-dto.model';
+import { RegisterDto } from './../../shared/DTO/register-dto.model';
 import { environment } from './../../../environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { User } from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,22 +19,22 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  register(email: string, password: string): Observable<any> {
+  register(email: string, password: string): Observable<RegisterDto> {
     let registerUrl = `${environment.reqresUrl}/register`;
     let credentials = {
       email: email,
       password: password
     }
-    return this.http.post<User>(registerUrl, credentials, this.headers);
+    return this.http.post<RegisterDto>(registerUrl, credentials, this.headers);
   }
 
-  login(email: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<LoginDto> {
     let loginUrl = `${environment.reqresUrl}/login`;
     let credentials = {
       email: email,
       password: password
     }
-    return this.http.post<any>(loginUrl, credentials, this.headers);
+    return this.http.post<LoginDto>(loginUrl, credentials, this.headers);
   }
 
   storeUserToken(token: string) {

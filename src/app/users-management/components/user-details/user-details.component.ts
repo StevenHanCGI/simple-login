@@ -1,7 +1,8 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsersManagementService } from './../../services/users-management.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/user.model';
+import { catchError, EMPTY, map, Observable, Subject, tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-details',
@@ -10,19 +11,30 @@ import { User } from 'src/app/shared/models/user.model';
 })
 export class UserDetailsComponent implements OnInit {
 
-  user: User;
+  private errorMessageSubject = new Subject<string>();
+  errorMessage$ = this.errorMessageSubject.asObservable();
 
-  constructor(private usersManagementService: UsersManagementService, private router: Router) {
-    this.usersManagementService.getSingleUser(this.getIdByUrl()).subscribe(singleUserDto => {
-      this.user = singleUserDto.data;
-    });
-  }
+  user$: Observable<User>;
 
   ngOnInit(): void {
+    let userId = this.getIdFromUrl();
+    if (userId) {
+      this.user$ = this.usersManagementService.getSingleUser(userId)
+        .pipe(
+          map(singleUserDto => singleUserDto.data),
+          catchError(err => {
+            this.errorMessageSubject.next(err);
+            return EMPTY;
+          })
+        );
+    }
   }
 
-  getIdByUrl() {
-    return this.router.url.split('/')[3];
+  constructor(private usersManagementService: UsersManagementService, private activatedRoute: ActivatedRoute) {
+  }
+
+  getIdFromUrl() {
+    return this.activatedRoute.snapshot.paramMap.get("id");
   }
 
 }

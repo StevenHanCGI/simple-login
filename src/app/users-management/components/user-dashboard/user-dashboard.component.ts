@@ -1,26 +1,35 @@
 import { UsersManagementService } from './../../services/users-management.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { User } from 'src/app/shared/models/user.model';
+import { map, Observable, catchError, EMPTY, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css']
 })
-export class UserDashboardComponent implements OnInit {
+export class UserDashboardComponent {
 
-  users: User[] = [];
+  private errorMessageSubject = new Subject<string>();
+  errorMessage$ = this.errorMessageSubject.asObservable();
+
+  users$: Observable<User[]> = this.usersManagementService.getListUsers()
+  .pipe(
+    map(userListDto => userListDto.data),
+    catchError(err => {
+      this.errorMessageSubject.next(err);
+      return EMPTY;
+    })
+  );
 
   constructor(private usersManagementService: UsersManagementService) { }
 
-  ngOnInit(): void {
-    this.usersManagementService.getListUsers().subscribe(response => {
-      this.users = response.data;
-    })
-  }
-
   addNewUser() {
     
+  }
+
+  notifyListeners(id: string) {
+    this.usersManagementService.userIdSubject.next(id);
   }
 
 }

@@ -7,13 +7,15 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
 
   registerForm: FormGroup;
   errMessageCred: string = "";
 
-  constructor(private fb: FormBuilder, private authenticationService: AuthenticationService) {
+  constructor(private fb: FormBuilder, private authenticationService: AuthenticationService) { }
+
+  ngOnInit(): void {
     this.registerForm = this.fb.group({
       email: new FormControl('', Validators.compose([
         Validators.required,
@@ -30,15 +32,15 @@ export class RegisterComponent {
     });
   }
 
-  onSubmit() {
+  submit() {
     if (this.registerForm.valid && this.getFirstPassword() === this.getRepeatPassword()) {
       this.authenticationService.register(this.getEmail(), this.getFirstPassword()).subscribe(response => {
         this.authenticationService.storeUserToken(response.token);
         this.authenticationService.gotoUsersDashboard();
       },
-      (errorResponse) => {
-        this.errMessageCred = errorResponse.error.error;
-      })
+        (errorResponse) => {
+          this.errMessageCred = errorResponse.error.error;
+        })
     } else {
       this.errMessageCred = 'Your password does not match';
     }

@@ -2,7 +2,7 @@
     Register
 </h1>
 <div class="container">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+    <form [formGroup]="registerForm" (ngSubmit)="submit()" novalidate>
         <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
             <input type="email" class="form-control" formControlName="email" placeholder="Enter Email">

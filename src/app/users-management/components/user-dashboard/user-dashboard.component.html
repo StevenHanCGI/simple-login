@@ -3,15 +3,18 @@
         Users Management
     </h1>
     <button type="button" class="btn btn-primary btn-lg" (click)="addNewUser()">Add user</button>
+    <div class="alert alert-danger error-message" role="alert" *ngIf="errorMessage$ | async as errorMessage">
+        {{errorMessage}}
+      </div>
 </div>
 <div class="row row-cols-1 row-cols-md-3 g-4">
-    <div *ngFor="let user of users" class="col">
+    <div *ngFor="let user of users$ | async" class="col">
         <div class="card h-100">
             <img src="{{user.avatar}}" class="card-img-top">
             <div class="card-body">
                 <h2 class="card-title">{{user.email}}</h2>
             </div>
-            <a [routerLink]="['/users', user.id]" class="stretched-link"></a>
+            <a [routerLink]="['/users', user.id]" class="stretched-link" (click)="notifyListeners(user.id)"></a>
         </div>
     </div>
 </div>
