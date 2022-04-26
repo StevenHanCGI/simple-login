@@ -2,7 +2,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsersManagementService } from './../../services/users-management.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/user.model';
-import { map, Subject, BehaviorSubject, take, tap } from 'rxjs';
+import { map, Subject, BehaviorSubject, take, tap, catchError, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -42,8 +42,11 @@ export class UserDashboardComponent implements OnInit {
         map(userListDto => userListDto.data),
         tap(object => {
           this.usersSubject.next(object)
-        }
-        )
+        }),
+        catchError(err => {
+          this.errorMessageSubject.next(err);
+          return EMPTY;
+        })
       ).subscribe()
   }
 
@@ -61,22 +64,26 @@ export class UserDashboardComponent implements OnInit {
         avatar: this.addUserForm.value.avatar
       };
       this.usersManagementService.createNewUser(newUser)
-      .pipe(
-        map(userCreatedDto => {
-          let newUser: User = {
-            id: userCreatedDto.id,
-            email: userCreatedDto.email,
-            first_name: userCreatedDto.first_name,
-            last_name: userCreatedDto.last_name,
-            avatar: ''
-          };
-          return newUser;
-        }),
-        take(1),
-        tap(user => {
-          this.usersSubject.getValue().push(user)
-        })
-      ).subscribe()
+        .pipe(
+          map(userCreatedDto => {
+            let newUser: User = {
+              id: userCreatedDto.id,
+              email: userCreatedDto.email,
+              first_name: userCreatedDto.first_name,
+              last_name: userCreatedDto.last_name,
+              avatar: ''
+            };
+            return newUser;
+          }),
+          take(1),
+          tap(user => {
+            this.usersSubject.getValue().push(user)
+          }),
+          catchError(err => {
+            this.errorMessageSubject.next(err);
+            return EMPTY;
+          })
+        ).subscribe()
     }
   }
 

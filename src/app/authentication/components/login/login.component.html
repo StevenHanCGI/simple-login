@@ -30,8 +30,8 @@
         <div class="d-grid gap-2 div-button">
             <button type="submit" class="btn btn-primary btn-block sign-in" [disabled]="!loginForm.valid">Sign in</button>
         </div>
-        <div *ngIf="errMessageCred.length > 0" class="alert alert-danger" role="alert">
-            {{errMessageCred}}
+        <div *ngIf="errorMessage$ | async as errorMessage" class="alert alert-danger" role="alert">
+            {{errorMessage}}
         </div>
     </form>
     <div class="container">

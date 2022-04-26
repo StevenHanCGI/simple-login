@@ -1,7 +1,7 @@
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { catchError, take, tap } from 'rxjs';
+import { catchError, EMPTY, Subject, take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -12,7 +12,9 @@ export class RegisterComponent implements OnInit {
 
 
   registerForm: FormGroup;
-  errMessageCred: string = "";
+
+  private errorMessageSubject = new Subject<string>();
+  errorMessage$ = this.errorMessageSubject.asObservable();
 
   constructor(private fb: FormBuilder, private authenticationService: AuthenticationService) { }
 
@@ -43,10 +45,13 @@ export class RegisterComponent implements OnInit {
             this.authenticationService.storeUserToken(response.token);
             this.authenticationService.gotoUsersDashboard();
           }),
-          catchError(err => this.errMessageCred = err),
+          catchError(err => {
+            this.errorMessageSubject.next(err);
+            return EMPTY;
+          })
         ).subscribe()
     } else {
-      this.errMessageCred = 'Your password does not match';
+      this.errorMessageSubject.next('Your password does not match');
     }
   }
 

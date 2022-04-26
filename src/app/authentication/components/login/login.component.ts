@@ -1,4 +1,4 @@
-import { catchError, take, tap } from 'rxjs';
+import { catchError, EMPTY, Subject, take, tap } from 'rxjs';
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -11,7 +11,9 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
-  errMessageCred: string = "";
+
+  private errorMessageSubject = new Subject<string>();
+  errorMessage$ = this.errorMessageSubject.asObservable();
 
   constructor(private fb: FormBuilder, private authenticationService: AuthenticationService) { }
 
@@ -34,7 +36,10 @@ export class LoginComponent implements OnInit {
             this.authenticationService.storeUserToken(response.token);
             this.authenticationService.gotoUsersDashboard();
           }),
-          catchError(err => this.errMessageCred = err),
+          catchError(err => {
+            this.errorMessageSubject.next(err);
+            return EMPTY;
+          })
         ).subscribe()
     }
   }
