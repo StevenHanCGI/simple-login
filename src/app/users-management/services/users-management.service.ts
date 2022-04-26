@@ -1,18 +1,21 @@
+import { AbstractApiService } from './../../shared/services/abstract-api.service';
+import { UserCreatedDto } from './../../shared/DTO/user-created-dto.model';
 import { SingleUserDto } from './../../shared/DTO/single-user-dto.model';
 import { UsersListDto } from './../../shared/DTO/users-list-dto.model';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError, catchError, Subject } from 'rxjs';
+import { Observable, catchError } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from 'src/app/shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersManagementService {
+export class UsersManagementService extends AbstractApiService {
 
-  userIdSubject = new Subject();
-
-  constructor(private http: HttpClient) { }
+  constructor(protected http: HttpClient) { 
+    super(http);
+  }
 
   getListUsers(): Observable<UsersListDto> {
     let listUsersUrl = `${environment.reqresUrl}/users?page=2`;
@@ -30,17 +33,11 @@ export class UsersManagementService {
     )
   }
 
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = `Backend returned code ${err.status}: ${err.message}`;
-    }
-    console.error(err);
-    return throwError(() => errorMessage);
+  createNewUser(user: User): Observable<UserCreatedDto> {
+    let createUserUrl = `${environment.reqresUrl}/users`;
+    return this.http.post<UserCreatedDto>(createUserUrl, user)
+    .pipe(
+      catchError(this.handleError)
+    )
   }
 }

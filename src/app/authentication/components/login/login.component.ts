@@ -1,4 +1,4 @@
-import { catchError, EMPTY, tap } from 'rxjs';
+import { catchError, take, tap } from 'rxjs';
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -29,13 +29,15 @@ export class LoginComponent implements OnInit {
 
   submit() {
     if (this.loginForm.valid) {
-      this.authenticationService.login(this.getEmail(), this.getPassword()).subscribe(token => {
-        this.authenticationService.storeUserToken(token.token);
-        this.authenticationService.gotoUsersDashboard();
-      },
-        (errorResponse) => {
-          this.errMessageCred = errorResponse.error.error;
-        })
+      this.authenticationService.login(this.getEmail(), this.getPassword())
+        .pipe(
+          take(1),
+          tap(response => {
+            this.authenticationService.storeUserToken(response.token);
+            this.authenticationService.gotoUsersDashboard();
+          }),
+          catchError(err => this.errMessageCred = err),
+        ).subscribe()
     }
   }
 

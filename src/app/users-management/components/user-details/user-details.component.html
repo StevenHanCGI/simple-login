@@ -1,14 +1,22 @@
 <div class="alert alert-danger error-message" role="alert" *ngIf="errorMessage$ | async as errorMessage">
     {{errorMessage}}
   </div>
-<div class="row row-cols-1 row-cols-md-3 g-4" *ngIf="user$ |async as user">
+<div class="row row-cols-1 row-cols-md-3 g-4 div-user" *ngIf="user$ |async as user">
     <div class="col">
         <div class="card h-100">
             <img src="{{user.avatar}}" class="card-img-top">
             <div class="card-body">
-                <h2 class="card-title">{{user.email}}</h2>
+                <h2 class="card-title">User details</h2>
+                <div class="card-text">
+                    <p>Id : {{user.id}}</p>
+                    <p>Email : {{user.email}}</p>
+                    <p>FirstName : {{user.first_name}}</p>
+                    <p>LastName : {{user.last_name}}</p>
+                </div>
             </div>
-            <a [routerLink]="['/users', user.id]" class="stretched-link"></a>
         </div>
     </div>
+</div>
+<div class="div-button">
+    <button class="btn btn-primary btn-lg" [routerLink]="['/users']">Back to users management</button>
 </div>

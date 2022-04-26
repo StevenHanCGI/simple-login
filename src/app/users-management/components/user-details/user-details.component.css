@@ -1,0 +1,17 @@
+.div-user, .div-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 3%;
+}
+
+.card-title {
+    text-align: center;
+}
+
+p {
+    font-size: 1.2em;
+}
+
+.div-button {
+    margin-bottom: 3%;
+}

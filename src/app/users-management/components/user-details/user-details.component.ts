@@ -1,4 +1,4 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UsersManagementService } from './../../services/users-management.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/user.model';

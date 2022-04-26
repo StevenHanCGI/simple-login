@@ -2,7 +2,9 @@
     <h1>
         Users Management
     </h1>
-    <button type="button" class="btn btn-primary btn-lg" (click)="addNewUser()">Add user</button>
+    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Add User
+      </button>
     <div class="alert alert-danger error-message" role="alert" *ngIf="errorMessage$ | async as errorMessage">
         {{errorMessage}}
       </div>
@@ -14,7 +16,68 @@
             <div class="card-body">
                 <h2 class="card-title">{{user.email}}</h2>
             </div>
-            <a [routerLink]="['/users', user.id]" class="stretched-link" (click)="notifyListeners(user.id)"></a>
+            <a [routerLink]="['/users', user.id]" class="stretched-link"></a>
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">User Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+                <form [formGroup]="addUserForm" (ngSubmit)="addNewUser()" novalidate>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" formControlName="email" placeholder="Enter Email">
+                        <small class="form-text text-muted"
+                            *ngIf="addUserForm.controls['email'].touched && addUserForm.controls['email'].errors?.['required']">
+                            <div class="alert alert-danger" role="alert">
+                                Please enter an email !
+                            </div>
+                        </small>
+            
+                        <small class="form-text text-muted"
+                            *ngIf="addUserForm.controls['email'].touched && addUserForm.controls['email'].errors?.['email']">
+                            <div class="alert alert-danger" role="alert">
+                                Email address is invalid.
+                            </div>
+                        </small>
+                    </div>
+            
+                    <div class="form-group">
+                        <label for="firstName">FirstName</label>
+                        <div class="d-flex">
+                            <input id="firstName" type="text" class="form-control" formControlName="firstName" placeholder="Enter FirstName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">LastName</label>
+                        <div class="d-flex">
+                            <input id="lastName" type="text" class="form-control" formControlName="lastName" placeholder="Enter LastName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">Avatar Url</label>
+                        <div class="d-flex">
+                            <input id="avatar" type="text" class="form-control" formControlName="avatar" placeholder="Enter avatar url">
+                        </div>
+                    </div>
+                    <div *ngIf="errorMessage$ | async as errorMessage" class="alert alert-danger" role="alert">
+                        {{errorMessage}}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="addNewUser()" [disabled]="!addUserForm.valid">Add user</button>
+        </div>
+      </div>
+    </div>
+  </div>

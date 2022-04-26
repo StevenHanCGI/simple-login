@@ -1,6 +1,7 @@
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { catchError, take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -34,13 +35,16 @@ export class RegisterComponent implements OnInit {
 
   submit() {
     if (this.registerForm.valid && this.getFirstPassword() === this.getRepeatPassword()) {
-      this.authenticationService.register(this.getEmail(), this.getFirstPassword()).subscribe(response => {
-        this.authenticationService.storeUserToken(response.token);
-        this.authenticationService.gotoUsersDashboard();
-      },
-        (errorResponse) => {
-          this.errMessageCred = errorResponse.error.error;
-        })
+
+      this.authenticationService.register(this.getEmail(), this.getFirstPassword())
+        .pipe(
+          take(1),
+          tap(response => {
+            this.authenticationService.storeUserToken(response.token);
+            this.authenticationService.gotoUsersDashboard();
+          }),
+          catchError(err => this.errMessageCred = err),
+        ).subscribe()
     } else {
       this.errMessageCred = 'Your password does not match';
     }
