@@ -4,8 +4,8 @@
 <div class="container">
     <form [formGroup]="loginForm" (ngSubmit)="submit()" novalidate>
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" formControlName="email" placeholder="Enter Email">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter Email">
             <small class="form-text text-muted"
                 *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors?.['required']">
                 <div class="alert alert-danger" role="alert">
@@ -24,8 +24,7 @@
         <div class="form-group password-form">
             <label for="password">Password</label>
             <div class="d-flex">
-                <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter Password"
-                    data-ng-pattern="/^\S*$/">
+                <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter Password">
             </div>
         </div>
         <div class="d-grid gap-2 div-button">
@@ -35,7 +34,7 @@
             {{errMessageCred}}
         </div>
     </form>
-    <div class="container register-div">
+    <div class="container">
         <div class="row justify-content-md-center">
             <div class="col col-lg-6">
                 <p class="not-member">Not a member?</p>

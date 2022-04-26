@@ -16,14 +16,6 @@ h1 {
     margin-bottom: 5%;
 }
 
-.button-eyeslash {
-    background-color: rgb(214, 214, 214);
-}
-
-.login-div {
-    padding-bottom: 5%;
-}
-
 .register, .already-member, .login {
     font-size: 1.3em;
 }

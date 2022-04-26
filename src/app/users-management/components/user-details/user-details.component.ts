@@ -2,7 +2,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UsersManagementService } from './../../services/users-management.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/shared/models/user.model';
-import { catchError, EMPTY, map, Observable, Subject, tap } from 'rxjs';
+import { catchError, EMPTY, map, Observable, Subject, take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-user-details',
@@ -21,6 +21,7 @@ export class UserDetailsComponent implements OnInit {
     if (userId) {
       this.user$ = this.usersManagementService.getSingleUser(userId)
         .pipe(
+          take(1),
           map(singleUserDto => singleUserDto.data),
           catchError(err => {
             this.errorMessageSubject.next(err);
