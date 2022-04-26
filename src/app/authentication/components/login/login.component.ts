@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  submit() {
+  submit(): void {
     if (this.loginForm.valid) {
       this.authenticationService.login(this.getEmail(), this.getPassword())
         .pipe(

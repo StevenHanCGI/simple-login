@@ -34,7 +34,7 @@ export class UserDetailsComponent implements OnInit {
   constructor(private usersManagementService: UsersManagementService, private activatedRoute: ActivatedRoute) {
   }
 
-  getIdFromUrl() {
+  getIdFromUrl(): string | null {
     return this.activatedRoute.snapshot.paramMap.get("id");
   }
 

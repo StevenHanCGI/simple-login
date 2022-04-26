@@ -46,11 +46,11 @@ export class AuthenticationService extends AbstractApiService {
       )
   }
 
-  storeUserToken(token: string) {
+  storeUserToken(token: string): void {
     localStorage.setItem('token', token);
   }
 
-  gotoUsersDashboard() {
+  gotoUsersDashboard(): void {
     this.router.navigate(['/users']);
   }
 

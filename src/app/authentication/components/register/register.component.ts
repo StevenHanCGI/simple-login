@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  submit() {
+  submit(): void {
     if (this.registerForm.valid && this.getFirstPassword() === this.getRepeatPassword()) {
 
       this.authenticationService.register(this.getEmail(), this.getFirstPassword())
